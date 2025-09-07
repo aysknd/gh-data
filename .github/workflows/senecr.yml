@@ -8,8 +8,8 @@ on:
       - main
 
 env:
-  AWS_REGION: eu-west-1         # kendi bölgeni yaz
-  ECR_REPOSITORY: my-ecr-repo   # ECR repository adın
+  AWS_REGION: us-east-1         # kendi bölgeni yaz
+  ECR_REPOSITORY: devicepark/publicrepo   # ECR repository adın
   PROJECT_NAME: devicepark-allocation-api     # image için temel isim
 
 jobs:
