@@ -4,8 +4,7 @@ on:
   push:
     tags:
       - '*'   # her tag geldiğinde çalışır
-    branches:
-      - main
+    
 
 env:
   AWS_REGION: us-east-1         # kendi bölgeni yaz
