@@ -1,15 +1,14 @@
-name: Build and Push to ECR
+name: Build and Push to Public ECR
 
 on:
   push:
     tags:
       - '*'   # her tag geldiğinde çalışır
-    
 
 env:
-  AWS_REGION: us-east-1         # kendi bölgeni yaz
-  ECR_REPOSITORY: devicepark  # ECR repository adın
-  PROJECT_NAME: allocation-api     # image için temel isim
+  AWS_REGION: us-east-1
+  PUBLIC_ECR_REPOSITORY: public.ecr.aws/devicepark/allocation-api
+  PROJECT_NAME: allocation-api
 
 jobs:
   build:
@@ -26,14 +25,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Public ECR
+        run: |
+          aws ecr-public get-login-password --region ${{ env.AWS_REGION }} | \
+          docker login --username AWS --password-stdin ${{ env.PUBLIC_ECR_REPOSITORY }}
 
       - name: Build, Tag, and Push Docker image
         run: |
           IMAGE_TAG=${GITHUB_REF##*/}
-          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}/${{ env.PROJECT_NAME }}:$IMAGE_TAG
+          IMAGE_URI=${{ env.PUBLIC_ECR_REPOSITORY }}:${IMAGE_TAG}
           
           echo "Building image: $IMAGE_URI"
           docker build -t $IMAGE_URI .
