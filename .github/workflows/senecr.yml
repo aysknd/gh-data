@@ -7,8 +7,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  PUBLIC_ECR_REPOSITORY: public.ecr.aws/devicepark/allocation-api
-  PROJECT_NAME: allocation-api
+  PUBLIC_ECR_REPOSITORY: public.ecr.aws/g9h7i8k9/devicepark/allocation-api
 
 jobs:
   build:
@@ -28,7 +27,7 @@ jobs:
       - name: Login to Public ECR
         run: |
           aws ecr-public get-login-password --region ${{ env.AWS_REGION }} | \
-          docker login --username AWS --password-stdin ${{ env.PUBLIC_ECR_REPOSITORY }}
+          docker login --username AWS --password-stdin public.ecr.aws/g9h7i8k9
 
       - name: Build, Tag, and Push Docker image
         run: |
